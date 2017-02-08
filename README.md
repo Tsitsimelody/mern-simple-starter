@@ -1,3 +1,3 @@
 ### Mern Simple Starter
 
-A simplified men starter application with the client and server
+A simplified React universal boilerplate application with the client and server
