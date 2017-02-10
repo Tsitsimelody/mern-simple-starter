@@ -1,41 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
+import App from './components/App';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import cookie from 'react-cookie';
+import reduxThunk from 'redux-thunk';
+import { AUTH_USER } from './actions/types';
+import reducers from './reducers';
 
 import '../static/style/style.css';
 
-const App = () => {
-  return (
-    <Router>
-      <div>
-       <ul>
-         <li><Link to="/">Home</Link></li>
-         <li><Link to="/about">About</Link></li>
-       </ul>
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export const store = createStore(reducers, composeEnhancers(
+    applyMiddleware(reduxThunk)
+));
 
-       <hr/>
+const token = cookie.load('token');
 
-       <Route exact path="/" component={Home}/>
-       <Route path="/about" component={About}/>
-    </div>
-  </Router>
-  )
+if (token) {
+  // Update application state. User has token and is probably authenticated
+  store.dispatch({ type: AUTH_USER });
 }
 
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-)
-
-const About = () => (
-  <div>
-    <h2>About</h2>
-  </div>
-)
-
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+  , document.getElementById("root"));

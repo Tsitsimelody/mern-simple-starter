@@ -4,6 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const VENDOR_LIBS = [
  'redux', 'react-redux', 'react-dom',
+ 'react-router-dom'
 ];
 
 module.exports = {
